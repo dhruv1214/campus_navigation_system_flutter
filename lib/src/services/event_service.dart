@@ -5,7 +5,7 @@ import '../models/event.dart';
 class EventService {
   static Future<List<Event>> fetchEvents() async {
     try {
-      final url = Uri.parse('http://192.168.0.29:8898/api/v1/events');
+      final url = Uri.parse('http://159.203.48.115:8898/api/v1/events');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

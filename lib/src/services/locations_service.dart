@@ -7,7 +7,7 @@ import '../models/location.dart';
 class LocationsService {
   static Future<List<Location>> fetchLocations() async {
     try {
-      final url = Uri.parse('http://192.168.0.29:8898/api/v1/locations');
+      final url = Uri.parse('http://159.203.48.115:8898/api/v1/locations');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -24,7 +24,7 @@ class LocationsService {
   static Future<List<Location>> fetchLocationsByBuildingId(String buildingId) async {
     try {
       final url =
-          Uri.parse('http://192.168.0.29:8898/api/v1/locations/building/$buildingId');
+          Uri.parse('http://159.203.48.115:8898/api/v1/locations/building/$buildingId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -42,7 +42,7 @@ class LocationsService {
   static Future<route.Route> fetchRoute(String startLocationId, String endLocationId) async {
     try {
       final url = Uri.parse(
-          'http://192.168.0.29:8898/api/v1/locations/distance/$startLocationId/$endLocationId');
+          'http://159.203.48.115:8898/api/v1/locations/distance/$startLocationId/$endLocationId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
