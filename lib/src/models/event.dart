@@ -4,8 +4,8 @@ class Event{
   final String eventId;
   final String name;
   final String description;
-  final String startDateTime;
-  final String endDateTime;
+  final DateTime startDateTime;
+  final DateTime endDateTime;
   final Location location;
 
   Event({
@@ -23,8 +23,8 @@ class Event{
       eventId: json['eventId'],
       name: json['name'],
       description: json['description'],
-      startDateTime: json['startDateTime'],
-      endDateTime: json['endDateTime'],
+      startDateTime: DateTime.parse(json['startDateTime']),
+      endDateTime: DateTime.parse(json['endDateTime']),
       location: Location.fromJson(json['location']),
     );
   }
