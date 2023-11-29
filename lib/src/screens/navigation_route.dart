@@ -115,7 +115,13 @@ Future.delayed(const Duration(seconds: 1), () {
       ),
       body: location == null || otherLocations == null || route == null
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : 
+          route!.path.isEmpty
+              ? const Center(
+                  child: Text('No route found'),
+                )
+              :
+          Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [

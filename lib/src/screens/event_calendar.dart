@@ -1,28 +1,33 @@
-
+import 'package:campus_navigation_system/src/models/event.dart';
+import 'package:campus_navigation_system/src/services/event_service.dart';
 import 'package:flutter/material.dart';
 
 class EventCalendar extends StatefulWidget {
+  const EventCalendar({Key? key}) : super(key: key);
+
+  static const String routeName = '/eventCalendar';
+
   @override
   _EventCalendarState createState() => _EventCalendarState();
 }
 
 class _EventCalendarState extends State<EventCalendar> {
-  // Define variables to hold the selected view and events
   String _selectedView = 'month';
-  final List<Event> _events = [
-    Event(
-      title: 'Academic Event',
-      description: 'This is an academic event',
-      date: DateTime.now().add(Duration(days: 1)),
-      type: EventType.academic,
-    ),
-    Event(
-      title: 'Social Event',
-      description: 'This is a social event',
-      date: DateTime.now().add(Duration(days: 2)),
-      type: EventType.social,
-    ),
-  ];
+
+  List<Event>? _events;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initStateAsync();
+  }
+
+  void initStateAsync() async {
+    _events = await EventService.fetchEvents();
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,87 +35,75 @@ class _EventCalendarState extends State<EventCalendar> {
       appBar: AppBar(
         title: const Text('Event Calendar'),
       ),
-      body: Column(
-        children: [
-          // Add a row of buttons to toggle the view
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedView = 'day';
-                  });
-                },
-                child: Text('Day'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedView = 'week';
-                  });
-                },
-                child: Text('Week'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedView = 'month';
-                  });
-                },
-                child: Text('Month'),
-              ),
-            ],
-          ),
-          // Display the events based on the selected view
-          if (_selectedView == 'day')
-            ..._events
-                .where((event) =>
-                    event.date.year == DateTime.now().year &&
-                    event.date.month == DateTime.now().month &&
-                    event.date.day == DateTime.now().day)
-                .map((event) => EventListItem(event: event))
-                .toList(),
-          if (_selectedView == 'week')
-            ..._events
-                .where((event) =>
-                    event.date.year == DateTime.now().year &&
-                    event.date.weekday >= DateTime.now().weekday &&
-                    event.date.weekday <= DateTime.now().weekday + 6)
-                .map((event) => EventListItem(event: event))
-                .toList(),
-          if (_selectedView == 'month')
-            ..._events
-                .where((event) =>
-                    event.date.year == DateTime.now().year &&
-                    event.date.month == DateTime.now().month)
-                .map((event) => EventListItem(event: event))
-                .toList(),
-        ],
-      ),
+      body: _events == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                // Add a row of buttons to toggle the view
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedView = 'day';
+                        });
+                      },
+                      child: Text('Day'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedView = 'week';
+                        });
+                      },
+                      child: Text('Week'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedView = 'month';
+                        });
+                      },
+                      child: Text('Month'),
+                    ),
+                  ],
+                ),
+                if (_selectedView == 'day')
+                  ..._events!
+                      .where((event) =>
+                          DateTime.parse(event.startDateTime).year ==
+                              DateTime.now().year &&
+                          DateTime.parse(event.startDateTime).month ==
+                              DateTime.now().month &&
+                          DateTime.parse(event.startDateTime).day ==
+                              DateTime.now().day)
+                      .map((event) => EventListItem(event: event))
+                      .toList(),
+                if (_selectedView == 'week')
+                  ..._events!
+                      .where((event) =>
+                          DateTime.parse(event.startDateTime).year ==
+                              DateTime.now().year &&
+                          DateTime.parse(event.startDateTime).weekday >=
+                              DateTime.now().weekday &&
+                          DateTime.parse(event.startDateTime).weekday <=
+                              DateTime.now().weekday + 6)
+                      .map((event) => EventListItem(event: event))
+                      .toList(),
+                if (_selectedView == 'month')
+                  ..._events!
+                      .where((event) =>
+                          DateTime.parse(event.startDateTime).year ==
+                              DateTime.now().year &&
+                          DateTime.parse(event.startDateTime).month ==
+                              DateTime.now().month)
+                      .map((event) => EventListItem(event: event))
+                      .toList(),
+              ],
+            ),
     );
   }
-}
-
-// Define a class to represent an event
-class Event {
-  final String title;
-  final String description;
-  final DateTime date;
-  final EventType type;
-
-  Event({
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.type,
-  });
-}
-
-// Define an enum to represent the type of event
-enum EventType {
-  academic,
-  social,
 }
 
 // Define a widget to display an event in the list
@@ -122,13 +115,13 @@ class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(event.title),
+      title: Text(event.name),
       subtitle: Text(event.description),
       trailing: Icon(
-        event.type == EventType.academic ? Icons.school : Icons.people,
-        color: event.date.isBefore(DateTime.now())
+        Icons.circle,
+        color: DateTime.parse(event.startDateTime).isBefore(DateTime.now())
             ? Colors.grey
-            : event.date.isAfter(DateTime.now())
+            : DateTime.parse(event.endDateTime).isAfter(DateTime.now())
                 ? Colors.blue
                 : Colors.black,
       ),

@@ -9,7 +9,7 @@ class Location {
   final String buildingId;
   final int id;
   final List<String> labels;
-  final Building building;
+  final Building? building;
 
   Location({
     required this.roomNumber,
@@ -24,6 +24,20 @@ class Location {
   });
 
   factory Location.fromJson(Map<String, dynamic> json) {
+    if (json['building'] != null) {
+      return Location(
+        roomNumber: json['roomNumber'],
+        locationId: json['locationId'],
+        name: json['name'],
+        description: json['description'],
+        floor: json['floor'],
+        buildingId: json['buildingId'],
+        id: json['id'],
+        labels: List<String>.from(json['labels']),
+        building: Building.fromJson(json['building']),
+      );
+    }
+
     return Location(
       roomNumber: json['roomNumber'],
       locationId: json['locationId'],
@@ -33,8 +47,7 @@ class Location {
       buildingId: json['buildingId'],
       id: json['id'],
       labels: List<String>.from(json['labels']),
-      building: Building.fromJson(json['building']),
+      building: null,
     );
   }
-
 }

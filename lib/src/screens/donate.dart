@@ -145,6 +145,11 @@ class _DonateFormState extends State<DonateForm> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your first name';
                                 }
+
+                                if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                                  return 'Please enter a valid name';
+                                }
+
                                 return null;
                               },
                             ),
@@ -160,6 +165,11 @@ class _DonateFormState extends State<DonateForm> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your last name';
                                 }
+                                
+                                if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                                  return 'Please enter a valid name';
+                                }
+
                                 return null;
                               },
                             ),
@@ -176,6 +186,12 @@ class _DonateFormState extends State<DonateForm> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
                           }
+
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+
                           return null;
                         },
                       ),
@@ -189,6 +205,11 @@ class _DonateFormState extends State<DonateForm> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter an amount';
                           }
+
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Please enter a valid amount';
+                          }
+
                           return null;
                         },
                       ),
@@ -243,6 +264,9 @@ class _DonateFormState extends State<DonateForm> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your state';
                                 }
+
+
+
                                 return null;
                               },
                             ),
@@ -253,11 +277,17 @@ class _DonateFormState extends State<DonateForm> {
                       TextFormField(
                         controller: _zipController,
                         decoration: _decoration.copyWith(
-                          labelText: 'Zip',
+                          labelText: 'Postal Code',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your zip code';
+                            return 'Please enter your postal code';
+                          }
+
+                          //check for canadian postal code
+                          if (!RegExp(r'^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid postal code';
                           }
                           return null;
                         },
@@ -282,6 +312,11 @@ class _DonateFormState extends State<DonateForm> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your card number';
                           }
+
+                          if(!RegExp(r'^[0-9]+$').hasMatch(value)){
+                            return 'Please enter a valid card number';
+                          }
+
                           return null;
                         },
                       ),
@@ -295,6 +330,11 @@ class _DonateFormState extends State<DonateForm> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter the card holder name';
                           }
+
+                          if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                            return 'Please enter a valid name';
+                          }
+
                           return null;
                         },
                       ),
@@ -311,6 +351,11 @@ class _DonateFormState extends State<DonateForm> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the expiry date';
                                 }
+
+                                if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                  return 'Please enter a valid expiry date';
+                                }
+
                                 return null;
                               },
                             ),
@@ -325,6 +370,10 @@ class _DonateFormState extends State<DonateForm> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the CVV';
+                                }
+
+                                if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                  return 'Please enter a valid CVV';
                                 }
                                 return null;
                               },

@@ -117,7 +117,7 @@ featchLocations() async {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(locations[index].building.imageURL),
+                              image: NetworkImage(locations[index].building!.imageURL),
                               fit: BoxFit.cover,
                             ),
                           ),
